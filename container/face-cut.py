@@ -35,7 +35,7 @@ async def handler(request):
 
     endpoint = os.environ['DB_ENDPOINT']
     path = os.environ['DB_PATH']
-    credentials = ydb.iam.MetadataUrlCredentials()
+    credentials = ydb.construct_credentials_from_environ()
     driver_config = ydb.DriverConfig(
         endpoint, path, credentials=credentials
     )
