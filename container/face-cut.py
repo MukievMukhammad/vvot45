@@ -33,8 +33,8 @@ async def handler(request):
     new_photo_key = ''.join([photo_key.split('.')[0], str(left), str(top), str(right), str(bottom), '.jpg'])
     s3.upload_fileobj(upload_img, 'itis-2022-2023-vvot45-faces', new_photo_key)
 
-    endpoint = ''
-    path = ''
+    endpoint = os.environ['DB_ENDPOINT']
+    path = os.environ['DB_PATH']
     credentials = ydb.iam.MetadataUrlCredentials()
     driver_config = ydb.DriverConfig(
         endpoint, path, credentials=credentials
