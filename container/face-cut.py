@@ -33,24 +33,25 @@ async def handler(request):
     new_photo_key = ''.join([photo_key.split('.')[0], str(left), str(top), str(right), str(bottom), '.jpg'])
     s3.upload_fileobj(upload_img, 'itis-2022-2023-vvot45-faces', new_photo_key)
 
-    endpoint = os.environ['DB_ENDPOINT']
-    path = os.environ['DB_PATH']
-    credentials = ydb.iam.MetadataUrlCredentials()
-    print(credentials)
-    print(vars(credentials))
-    driver_config = ydb.DriverConfig(
-        endpoint, path, credentials=credentials
-    )
-    driver = ydb.Driver(driver_config)
-    
-    query = f"""
-        PRAGMA TablePathPrefix("{os.environ['DB_PATH']}");
-        INSERT INTO {os.environ['DB_NAME']} (original_photo, face_photo)
-        VALUES ('{photo_key}', '{new_photo_key}');
-    """
-    session = ydb.Driver.table_client.session().create()
-    session.transaction().execute(query, commit_tx=True)
-    session.closing()
+    try:
+        endpoint = os.environ['DB_ENDPOINT']
+        path = os.environ['DB_PATH']
+        credentials = ydb.iam.MetadataUrlCredentials()
+        driver_config = ydb.DriverConfig(
+            endpoint, path, credentials=credentials
+        )
+        driver = ydb.Driver(driver_config)
+        
+        query = f"""
+            PRAGMA TablePathPrefix("{os.environ['DB_PATH']}");
+            INSERT INTO {os.environ['DB_NAME']} (original_photo, face_photo)
+            VALUES ('{photo_key}', '{new_photo_key}');
+        """
+        session = driver.table_client.session().create()
+        session.transaction().execute(query, commit_tx=True)
+        session.closing()
+    except Exception as e:
+        print(e)
 
     return text('Ok')
 
