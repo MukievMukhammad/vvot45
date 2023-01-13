@@ -17,12 +17,12 @@ async def handler(request):
     s3 = session.client(service_name='s3', endpoint_url='https://storage.yandexcloud.net')
     img = io.BytesIO()
     photo_key = msg['photo_key']
-    crods = msg['cords']
+    cords = msg['cords']
     s3.download_fileobj('cloudphoto', photo_key, img)
 
     image = Image.open(img)
     left = int(cords[0]['x'])
-    top = int(crods[0]['y'])
+    top = int(cords[0]['y'])
     right = int(cords[3]['x'])
     bottom = int(cords[1]['y'])
     cropped = image.crop((left, top, right, bottom))
