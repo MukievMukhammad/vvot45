@@ -1,4 +1,4 @@
-import json, io, boto3, os, ydb, sys
+import json, io, boto3, os, ydb, ydb.iam
 from sanic import Sanic
 from sanic.response import text
 from PIL import Image
@@ -35,7 +35,7 @@ async def handler(request):
 
     endpoint = os.environ['DB_ENDPOINT']
     path = os.environ['DB_PATH']
-    credentials = ydb.construct_credentials_from_environ()
+    credentials = ydb.iam.MetadataUrlCredentials()
     print(credentials)
     print(vars(credentials))
     driver_config = ydb.DriverConfig(
