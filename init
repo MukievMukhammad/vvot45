@@ -1,0 +1,14 @@
+# curl -X POST message-queue.api.cloud.yandex.net \
+# -H "Host: message-queue.api.cloud.yandex.net"
+# -H "Content-Length: length"
+# -H "Content-Type: application/x-www-form-urlencoded"
+# -H ""
+
+#
+yc serverless function version create \
+--function-name=vvot45-face-detection \
+--runtime python37 \
+--entrypoint index.handler \
+--memory 128m \
+--execution-timeout 3s \
+--source-path ./face-detection --environment AWS_ACCESS_KEY_ID=YCAJEa-unrazdIwwi-A7xr88R --environment AWS_SECRET_ACCESS_KEY=YCMtLeji1eGJ37qBJP5GLoeQh72K9CSJklwHhaug --service-account-id ajehbphvfl8f029h6nf3
