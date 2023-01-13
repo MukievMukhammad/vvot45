@@ -11,7 +11,6 @@ async def after_server_start(app, loop):
 
 @app.route("/", methods=["POST"])
 async def handler(request):
-    print(vars(request))
     print(request.body)
     msg = json.loads(request.body['messages'][0]['details']['message']['body'])
     session = boto3.session.Session(region_name='ru-central1')
