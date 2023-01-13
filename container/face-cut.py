@@ -10,9 +10,10 @@ async def after_server_start(app, loop):
     print(f"App listening at port {os.environ['PORT']}")
 
 @app.route("/", methods=["POST"])
-async def handler(event):
-    print(event)
-    msg = json.loads(event['messages'][0]['details']['message']['body'])
+async def handler(request):
+    print(vars(request))
+    print(request.body)
+    msg = json.loads(request.body['messages'][0]['details']['message']['body'])
     session = boto3.session.Session(region_name='ru-central1')
     s3 = session.client(service_name='s3', endpoint_url='https://storage.yandexcloud.net')
     img = io.BytesIO()
