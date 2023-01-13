@@ -48,7 +48,7 @@ async def handler(request):
         INSERT INTO {os.environ['DB_NAME']} (original_photo, face_photo)
         VALUES ('{photo_key}', '{new_photo_key}');
     """
-    session = driver.table_client.session().create()
+    session = ydb.Driver.table_client.session().create()
     session.transaction().execute(query, commit_tx=True)
     session.closing()
 
